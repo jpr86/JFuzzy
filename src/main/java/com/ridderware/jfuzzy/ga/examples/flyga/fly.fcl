@@ -1,0 +1,26 @@
+FUNCTION_BLOCK
+VAR_INPUT
+	AoA :	REAL;
+END_VAR
+VAR_OUTPUT
+	Roll Angle :	REAL;
+END_VAR
+FUZZIFY AoA
+	TERM Rear Left := (-180.0, 1.0) (-90.0, 0.0);
+	TERM Left := (-135.0, 0.0) (-90.0, 1.0) (-45.0, 0.0);
+	TERM Front Left := (-90.0, 0.0) (-45.0, 1.0) (0.0, 0.0);
+	TERM Front := (-20.0, 0.0) (0.0, 1.0) (20.0, 0.0);
+	TERM Front Right := (0.0, 0.0) (45.0, 1.0) (90.0, 0.0);
+	TERM Right := (45.0, 0.0) (90.0, 1.0) (135.0, 0.0);
+	TERM Rear Right := (90.0, 0.0) (180.0, 1.0);
+END_FUZZIFY
+DEFUZZIFY Roll Angle
+	TERM Hard Left := (-60.0, 1.0) (-30.0, 0.0);
+	TERM Left := (-45.0, 0.0) (-20.0, 1.0) (0.0, 0.0);
+	TERM Neutral := (-10.0, 0.0) (0.0, 1.0) (10.0, 0.0);
+	TERM Right := (0.0, 0.0) (20.0, 1.0) (45.0, 0.0);
+	TERM Hard Right := (30.0, 0.0) (60.0, 1.0);
+	METHOD : COG;
+	DEFAULT := 0.0;
+END_DEFUZZIFY
+END_FUNCTION_BLOCK

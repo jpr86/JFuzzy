@@ -1,0 +1,48 @@
+FUNCTION_BLOCK
+VAR_INPUT
+	Amplitude Slope :	REAL;
+	AoA :	REAL;
+END_VAR
+VAR_OUTPUT
+	Roll Angle :	REAL;
+END_VAR
+FUZZIFY Amplitude Slope
+	TERM Decreasing := (-100.0, 1.0) (0.0, 0.0);
+	TERM Neutral := (-10.0, 0.0) (0.0, 1.0) (10.0, 0.0);
+	TERM Increasing := (0.0, 0.0) (100.0, 1.0);
+END_FUZZIFY
+FUZZIFY AoA
+	TERM Rear Left := (-180.0, 1.0) (-90.0, 0.0);
+	TERM Left := (-135.0, 0.0) (-90.0, 1.0) (-45.0, 0.0);
+	TERM Front Left := (-90.0, 0.0) (-45.0, 1.0) (0.0, 0.0);
+	TERM Front := (-20.0, 0.0) (0.0, 1.0) (20.0, 0.0);
+	TERM Front Right := (0.0, 0.0) (45.0, 1.0) (90.0, 0.0);
+	TERM Right := (45.0, 0.0) (90.0, 1.0) (135.0, 0.0);
+	TERM Rear Right := (90.0, 0.0) (180.0, 1.0);
+END_FUZZIFY
+DEFUZZIFY Roll Angle
+	TERM Hard Left := (-60.0, 1.0) (-30.0, 0.0);
+	TERM Left := (-45.0, 0.0) (-20.0, 1.0) (0.0, 0.0);
+	TERM Neutral := (-10.0, 0.0) (0.0, 1.0) (10.0, 0.0);
+	TERM Right := (0.0, 0.0) (20.0, 1.0) (45.0, 0.0);
+	TERM Hard Right := (30.0, 0.0) (60.0, 1.0);
+	METHOD : COG;
+	DEFAULT := 0.0;
+END_DEFUZZIFY
+RULEBLOCK
+	AND : MIN;
+	ACT : MIN;
+	ACCU : MAX;
+	RULE 1 : IF AoA IS Rear Left THEN Roll Angle IS Hard Left;
+	RULE 2 : IF AoA IS Right THEN Roll Angle IS Right WITH 0.5;
+	RULE 3 : IF AoA IS Front Left THEN Roll Angle IS Neutral;
+	RULE 4 : IF AoA IS Rear Right THEN Roll Angle IS Hard Right;
+	RULE 5 : IF AoA IS Left THEN Roll Angle IS Left WITH 0.5;
+	RULE 6 : IF AoA IS Right THEN Roll Angle IS Hard Right WITH 0.5;
+	RULE 7 : IF AoA IS Front Right THEN Roll Angle IS Right;
+	RULE 8 : IF AoA IS Front Right THEN Roll Angle IS Neutral;
+	RULE 9 : IF AoA IS Front THEN Roll Angle IS Neutral;
+	RULE 10 : IF AoA IS Front Left THEN Roll Angle IS Left;
+	RULE 11 : IF AoA IS Left THEN Roll Angle IS Hard Left WITH 0.5;
+END_RULEBLOCK
+END_FUNCTION_BLOCK
