@@ -2,7 +2,7 @@
 Java Fuzzy Logic
 
 JFuzzy is a fuzzy logic library in java that facilitates the developmentof fuzzy inference systems.  It supports the use of 
-Fuzzy Control Language (FCL), and works with JEvolve to automatically generate fuzzy inference systems.
+Fuzzy Control Language (FCL), and works with JEvolve to automatically generate fuzzy inference systems and controllers.
 
 Building a fuzzy controller requires creation of a RuleBase, and then adding rules to the RuleBase. A rule is composed of 
 conditions for firing the rule and conclusions that result from firing the rule. Conditions may be complex and constructed 
